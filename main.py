@@ -111,9 +111,7 @@ def login():
 
 
 def main():
-    global client
     db_session.global_init('db/data_of_users.db')
-    client = app.test_client()
     app.run()
 
 
