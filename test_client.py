@@ -1,4 +1,4 @@
-from main import client
+from app import client
 from requests import post
 # res = client.get('/smth')
 # client.post('smth', json={})

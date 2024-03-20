@@ -1,4 +1,4 @@
-from main import client
+from app import client
 
 def test_get():
     res = client.get('/smth')
