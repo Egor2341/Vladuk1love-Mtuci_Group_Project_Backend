@@ -17,6 +17,8 @@ def registration():
     user = User(
         name=params['name'],
         login=params['login'],
+        age=params['params'],
+        sex=params['sex']
     )
     user.set_password(params['password'])
     db_sess.add(user)
