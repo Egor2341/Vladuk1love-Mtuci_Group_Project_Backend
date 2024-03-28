@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from data import db_session
 from data.users import User
 from flask_jwt_extended import JWTManager, jwt_required
