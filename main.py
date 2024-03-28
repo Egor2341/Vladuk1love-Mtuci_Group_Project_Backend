@@ -17,7 +17,7 @@ def registration():
     user = User(
         name=params['name'],
         login=params['login'],
-        age=params['params'],
+        age=params['age'],
         sex=params['sex']
     )
     user.set_password(params['password'])
@@ -38,9 +38,21 @@ def login():
     return {'access_token': token}
 
 
+@app.route('/profile')
+def profile():
+    db_sess = db_session.create_session()
+    params = request.json
+    info = db_sess.query(User).filter(params['login'] == User.login).one()
+    res = {
+        'name': info.name,
+        'age': info.age,
+        'sex': info.sex
+    }
+    return jsonify(res)
+
 def main():
     db_session.global_init('db/data_of_users.db')
-    app.run()
+    app.run(debug=True)
 
 
 if __name__ == '__main__':
