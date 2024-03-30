@@ -4,12 +4,13 @@ from sqlalchemy.orm import relationship
 from .db_session import SqlAlchemyBase
 
 
-class Profile(SqlAlchemyBase):
-    __tablename__ = 'profiles'
+class Photo(SqlAlchemyBase):
+    __tablename__ = 'photos'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False, unique=True)
-    likes = sqlalchemy.Column(sqlalchemy.Integer)
-    description = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
-    user = relationship('User', back_populates='profile', uselist=False)
+    img = sqlalchemy.Column(sqlalchemy.Text, nullable=False, unique=True)
+    name = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
+    mimetype = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    user_imgs = relationship('User', back_populates='photos')

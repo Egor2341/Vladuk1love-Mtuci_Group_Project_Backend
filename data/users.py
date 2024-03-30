@@ -18,7 +18,8 @@ class User(SqlAlchemyBase, UserMixin):
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     sex = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    profile = relationship('Profiles', back_populates='user', uselist=False)
+    profile = relationship('Profile', back_populates='user', uselist=False)
+    photos = relationship('Photo', back_populates='user_imgs')
 
     def get_token(self, expire_time=24):
         expire_delta = timedelta(expire_time)
