@@ -41,8 +41,8 @@ def login():
 @app.route('/profile')
 def profile():
     db_sess = db_session.create_session()
-    params = request.json
-    info = db_sess.query(User).filter(params['login'] == User.login).one()
+    login = request.json['login']
+    info = db_sess.query(User).filter(login == User.login).one()
     res = {
         'name': info.name,
         'age': info.age,

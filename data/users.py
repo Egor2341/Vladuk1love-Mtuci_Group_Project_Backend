@@ -1,4 +1,6 @@
 import sqlalchemy
+from sqlalchemy.orm import relationship
+
 from .db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -16,6 +18,7 @@ class User(SqlAlchemyBase, UserMixin):
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     sex = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    profile = relationship('Profiles', back_populates='user', uselist=False)
 
     def get_token(self, expire_time=24):
         expire_delta = timedelta(expire_time)
@@ -24,8 +27,6 @@ class User(SqlAlchemyBase, UserMixin):
         )
         return token
 
-    def __repr__(self):
-        return f"<User> {self.email}"
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
