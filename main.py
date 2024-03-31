@@ -65,28 +65,27 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/photos', methods=['GET', 'POST'])
-def photos():
-    print(request.data)
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return 'not file'
-        file = request.files['file']
-        if file.filename == '':
-            return 'not filename'
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # db_sess = db_session.create_session()
-            # photo = Photo(
-            #     user_login=user_login,
-            #     img=file.read(),
-            #     mimetype=file.mimetype,
-            #     name=filename
-            # )
-            # db_sess.add(photo)
-            # db_sess.commit()
-            return 'photo uploaded'
+@app.route('/photos/<user_login>', methods=['GET', 'POST'])
+def photos(user_login):
+    db_sess = db_session.create_session()
+    if db_sess.query(User).filter(user_login == User.login).all() != []:
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                return 'not file'
+            file = request.files['file']
+            if file.filename == '':
+                return 'not filename'
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                photo = Photo(
+                    user_login=user_login,
+                    img=os.path.join(app.config['UPLOAD_FOLDER']),
+                    name=filename
+                )
+                db_sess.add(photo)
+                db_sess.commit()
+                return 'photo uploaded'
     return 'nothing'
 
 

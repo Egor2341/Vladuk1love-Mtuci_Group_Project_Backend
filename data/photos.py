@@ -9,8 +9,7 @@ class Photo(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False, unique=True)
-    img = sqlalchemy.Column(sqlalchemy.Text, nullable=False, unique=True)
+    user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False)
+    img = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
-    mimetype = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     user_imgs = relationship('User', back_populates='photos')
