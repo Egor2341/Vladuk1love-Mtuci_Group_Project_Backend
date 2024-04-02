@@ -8,10 +8,12 @@ from data.photos import Photo
 from data.users import User
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
+from config import Config
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['SECRET_KEY'] = 'my_own_secret_key'
+cors = CORS(app, resources={r"/api/private": {"origins": Config.CORS_ALLOWED_ORIGINS}})
+app.config['SECRET_KEY'] = Config.SECRET_KEY
+app.config['CORS_HEADERS'] = 'Content-Type'
 jwt = JWTManager(app)
 
 UPLOAD_FOLDER = 'photos/'
