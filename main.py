@@ -11,9 +11,8 @@ from flask_cors import CORS
 from config import Config
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": Config.CORS_ALLOWED_ORIGINS}})
+cors = CORS(app, resources={r"*": {"origins": 'http://localhost:5000'}})
 app.config['SECRET_KEY'] = Config.SECRET_KEY
-app.config['CORS_HEADERS'] = 'Content-Type'
 jwt = JWTManager(app)
 
 UPLOAD_FOLDER = 'photos/'
@@ -49,7 +48,7 @@ def login():
     return {'access_token': token}
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['POST'])
 def profile():
     db_sess = db_session.create_session()
     login = request.json['login']
