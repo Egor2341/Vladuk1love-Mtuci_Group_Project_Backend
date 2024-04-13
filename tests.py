@@ -10,12 +10,12 @@
 import os
 import requests
 
-photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
-files = {
-    'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
-}
-res = requests.post('http://127.0.0.1:5000/photos/Egorik', files=files)
-print(res.text)
+# photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
+# files = {
+#     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
+# }
+# res = requests.post('http://127.0.0.1:5000/photos/Egorik', files=files)
+# print(res.text)
 
 # import requests
 #
@@ -26,3 +26,9 @@ print(res.text)
 #     'sex': 'male',
 #     'password': 'qwerty'
 # })
+
+from s3 import s3
+# photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
+photo = 'D:\PycharmProjects\Backend_Egor\photos\w1.jpg'
+with open(photo, 'wb') as data:
+    s3.download_file(data, '1')
