@@ -10,15 +10,13 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
+from s3 import s3
+from settings import settings
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
 jwt = JWTManager(app)
-
-UPLOAD_FOLDER = 'photos/'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 @app.route("/registration", methods=["POST"])
 def registration():
@@ -32,20 +30,32 @@ def registration():
     )
     user.set_password(params['password'])
     db_sess.add(user)
-    db_sess.commit()
-    token = user.get_token()
-    return {'access_token': token}
+    try:
+        db_sess.commit()
+    except:
+        return 'Пользователь уже существует'
+    # token = user.get_token()
+    # return {'access_token': token}
+    return 'OK'
 
 
 @app.route('/login', methods=['POST'])
 def login():
     db_sess = db_session.create_session()
     params = request.json
-    user = db_sess.query(User).filter(params['login'] == User.login).one()
+    try:
+        user = db_sess.query(User).filter(params['login'] == User.login).one()
+    except:
+        return 'Неверно указан логин'
+    # try:
+    #     user.check_password(params['password'])
+    # except:
+    #     return 'Неверно указан пароль'
     if not user.check_password(params['password']):
-        raise Exception('No user with this password')
-    token = user.get_token()
-    return {'access_token': token}
+        return 'Неверно указан пароль'
+    return 'Все указано верно'
+    # token = user.get_token()
+    # return {'access_token': token}
 
 
 @app.route('/profile', methods=['POST'])
@@ -63,7 +73,7 @@ def profile():
 
 def allowed_file(filename):
     return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
 @app.route('/photos/<user_login>', methods=['GET', 'POST'])
@@ -78,10 +88,10 @@ def photos(user_login):
                 return 'not filename'
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                s3.upload_file(file, f'{user_login}_{filename}')
                 photo = Photo(
                     user_login=user_login,
-                    img=os.path.join(app.config['UPLOAD_FOLDER']),
+                    img=settings.AWS_BUCKET,
                     name=filename
                 )
                 db_sess.add(photo)
