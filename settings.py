@@ -5,4 +5,6 @@ class Settings():
     AWS_HOST = 'http://localhost:9000'
     AWS_BUCKET = 'photos'
 
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 settings = Settings()
