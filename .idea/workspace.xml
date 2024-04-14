@@ -5,19 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="cors">
-      <change afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/additional_information.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/preferences.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/env.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/script.py.mako" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/__all_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/__all_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/db_session.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/db_session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/photos.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/photos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/additional_information.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/additional_information.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/profiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/profiles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/data_of_users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/2024_04_14_1343-208e61f4ef73_first_migthation.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/2024_04_14_1350-2b4de91df81f_create_pref.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +72,7 @@
     "last_opened_file_path": "C:/Users/Давид/Flask_Server/Vladuk1love-Mtuci_Group_Project_Backend"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.tests">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Vladuk1love-Mtuci_Group_Project_Backend" />
       <option name="ENV_FILES" value="" />
@@ -125,8 +119,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.tests" />
+        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>

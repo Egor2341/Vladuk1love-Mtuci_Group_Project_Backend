@@ -10,7 +10,7 @@ class Info(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False, unique=True)
-    about_me = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
+    about_me = sqlalchemy.Column(sqlalchemy.Text)
     interests = sqlalchemy.Column(sqlalchemy.Text)
     z = sqlalchemy.Column(sqlalchemy.String)
     height = sqlalchemy.Column(sqlalchemy.Integer)
