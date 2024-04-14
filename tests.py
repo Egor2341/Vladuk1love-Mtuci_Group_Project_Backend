@@ -18,16 +18,16 @@
 # print(res.text)
 
 # import requests
-#
+# #
 # res = requests.post('http://127.0.0.1:5000/registration', json={
-#     'login': 'Egorik22',
+#     'login': 'Egorik222',
 #     'name': 'Egor',
 #     'age': 18,
 #     'sex': 'male',
 #     'password': 'qwerty'
 # })
 #
-# print(res.text)
+# print(res.json())
 
 # from s3 import s3
 # # photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
@@ -39,7 +39,7 @@ import requests
 
 res = requests.post('http://127.0.0.1:5000/login', json={
     'login': 'Egorik22',
-    'password': 'qwerty'
+    'password': 'qwert2y'
 })
 
-print(res.text)
+print(res.json())

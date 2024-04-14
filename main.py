@@ -10,13 +10,18 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
-from s3 import s3
+# from s3 import s3
 from settings import settings
+
+from sqlalchemy.exc import IntegrityError, NoResultFound
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+
 jwt = JWTManager(app)
+
 
 @app.route("/registration", methods=["POST"])
 def registration():
@@ -32,11 +37,11 @@ def registration():
     db_sess.add(user)
     try:
         db_sess.commit()
-    except:
-        return 'Пользователь уже существует'
+    except IntegrityError:
+        return {'access': 'Такой пользователь уже существует'}
     # token = user.get_token()
-    # return {'access_token': token}
-    return 'OK'
+    return {'access': ''}
+    # return jsonify({'access': 'OK'})
 
 
 @app.route('/login', methods=['POST'])
@@ -45,15 +50,11 @@ def login():
     params = request.json
     try:
         user = db_sess.query(User).filter(params['login'] == User.login).one()
-    except:
-        return 'Неверно указан логин'
-    # try:
-    #     user.check_password(params['password'])
-    # except:
-    #     return 'Неверно указан пароль'
+    except NoResultFound:
+        return {'access': 'Неверно указан логин', 'exception': 'NoResultFound'}
     if not user.check_password(params['password']):
-        return 'Неверно указан пароль'
-    return 'Все указано верно'
+        return {'access': 'Неверно указан пароль'}
+    return {'access': 'Все указано верно', 'status_code': 200}
     # token = user.get_token()
     # return {'access_token': token}
 

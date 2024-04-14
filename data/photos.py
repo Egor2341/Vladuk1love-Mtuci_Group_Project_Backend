@@ -12,4 +12,4 @@ class Photo(SqlAlchemyBase):
     user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False)
     img = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
-    user_imgs = relationship('User', back_populates='photos')
+    user_img = relationship('data.users.User', back_populates='photos', uselist=False)
