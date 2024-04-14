@@ -1,3 +1,4 @@
 class Config:
     SECRET_KEY = 'MYOWNSECRETKEYF[POSAIFPOIPOAJDFPAS21324W'
     CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:5000']
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db/data_of_users'
