@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="cors">
+    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="add user_preferences">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_information.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/additional_information.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/profiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/profiles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/data_of_users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/versions/2024_04_14_1343-208e61f4ef73_first_migthation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/versions/2024_04_14_1350-2b4de91df81f_create_pref.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,12 +30,12 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "David-Bulatsev"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;David-Bulatsev&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -62,16 +58,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "Python.tests.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "devDavid",
-    "last_opened_file_path": "C:/Users/Давид/Flask_Server/Vladuk1love-Mtuci_Group_Project_Backend"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tests.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;devDavid&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Давид/Flask_Server/Vladuk1love-Mtuci_Group_Project_Backend&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.tests">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Vladuk1love-Mtuci_Group_Project_Backend" />
@@ -196,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713015729813</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="add user_preferences">
+      <option name="closed" value="true" />
+      <created>1713169532866</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1713169532866</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,6 +234,7 @@
     <MESSAGE value="solving problem" />
     <MESSAGE value="frist try" />
     <MESSAGE value="cors" />
-    <option name="LAST_COMMIT_MESSAGE" value="cors" />
+    <MESSAGE value="add user_preferences" />
+    <option name="LAST_COMMIT_MESSAGE" value="add user_preferences" />
   </component>
 </project>
