@@ -5,6 +5,7 @@ from data import db_session
 from data.photos import Photo
 from data.users import User
 from data.additional_information import Info
+from data.preferences import Preference
 
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
@@ -79,24 +80,22 @@ def profile():
     return {'access': 'Пользователь не найден'}
 
 
-@app.route('/user_info', methods=['PUT'])
-def post_user_info():
+# для доп инфы
+@app.route('/user_info/<user_login>', methods=["GET"])
+def get_user_info(user_login):
     db_sess = db_session.create_session()
-    params = request.json
-    user = db_sess.query(User).filter_by(login=params['login']).first()
+    user = db_sess.query(User).filter(user_login == User.login).first()
     if user:
-        db_sess.query(Info).filter(user.login == Info.user_login). \
-            update({'about_me': params['about_me'],
-                    'interests': params['interests'],
-                    'z': params['z'],
-                    'height': params['height'],
-                    'education': params['education']})
-        db_sess.commit()
-        return {'access': 'Данные перезаписаны'}
+        return jsonify({'about_me': user.add_info.about_me,
+                        'interests': user.add_info.interests,
+                        'z': user.add_info.z,
+                        'height': user.add_info.height,
+                        'education': user.add_info.education,
+                        'access': 'Всё прошло удачно'})
     return {'access': 'Пользователь не найден'}
 
 
-@app.route('/user_info', methods=['GET', 'POST'])
+@app.route('/user_info', methods=['POST'])
 def update_user_info():
     db_sess = db_session.create_session()
     params = request.json
@@ -119,17 +118,72 @@ def update_user_info():
     return {'access': 'Пользователь не найден'}
 
 
-@app.route('/user_info/<user_login>', methods=["GET"])
-def get_user_info(user_login):
+@app.route('/user_info', methods=['PUT'])
+def post_user_info():
+    db_sess = db_session.create_session()
+    params = request.json
+    user = db_sess.query(User).filter_by(login=params['login']).first()
+    if user:
+        db_sess.query(Info).filter(user.login == Info.user_login). \
+            update({'about_me': params['about_me'],
+                    'interests': params['interests'],
+                    'z': params['z'],
+                    'height': params['height'],
+                    'education': params['education']})
+        db_sess.commit()
+        return {'access': 'Данные перезаписаны'}
+    return {'access': 'Пользователь не найден'}
+
+
+# делаю для предпочтений
+@app.route('/user_preferences/<user_login>', methods=["GET"])
+def get_user_preferences(user_login):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(user_login == User.login).first()
     if user:
-        return jsonify({'about_me': user.add_info.about_me,
-                        'interests': user.add_info.interests,
-                        'z': user.add_info.z,
-                        'height': user.add_info.height,
-                        'education': user.add_info.education,
+        return jsonify({'age_pref': user.preferences.age_pref,
+                        'height_pref': user.preferences.height_pref,
+                        'weight_pref': user.preferences.weight_pref,
+                        'habbits': user.preferences.habbits,
                         'access': 'Всё прошло удачно'})
+    return {'access': 'Пользователь не найден'}
+
+
+@app.route('/user_preferences', methods=['POST'])
+def update_user_preferences():
+    db_sess = db_session.create_session()
+    params = request.json
+    user = db_sess.query(User).filter(params['login'] == User.login).first()
+    if db_sess.query(Preference).filter(params['login'] == Preference.user_login).first():
+        return {'access': 'Используйте метод PUT, чтобы перезаписать данные'}
+    if user:
+        if request.method == 'POST':
+            pref = Preference(
+                age_pref=params['age_pref'],
+                height_pref=params['height_pref'],
+                weight_pref=params['weight_pref'],
+                habbits=params['habbits']
+            )
+            user.preferences = pref
+            db_sess.commit()
+            db_sess.add(pref)
+            return {'access': 'Информация добавлена'}
+    return {'access': 'Пользователь не найден'}
+
+
+@app.route('/user_preferences', methods=['PUT'])
+def post_user_preferences():
+    db_sess = db_session.create_session()
+    params = request.json
+    user = db_sess.query(User).filter_by(login=params['login']).first()
+    if user:
+        db_sess.query(Preference).filter(user.login == Preference.user_login). \
+            update({'age_pref': params['age_pref'],
+                    'height_pref': params['height_pref'],
+                    'weight_pref': params['weight_pref'],
+                    'habbits': params['habbits']})
+        db_sess.commit()
+        return {'access': 'Данные перезаписаны'}
     return {'access': 'Пользователь не найден'}
 
 

@@ -18,15 +18,23 @@
 # print(res.text)
 
 import requests
-#
-# res = requests.post('http://127.0.0.1:5000/registration', json={
+
+# res = requests.post('http://127.0.0.1:5000/user_preferences', json={
 #     'login': 'Egorik222',
-#     'name': 'Egor',
-#     'age': 18,
-#     'sex': 'male',
-#     'password': 'qwerty'
+#     'age_pref': '18-20',
+#     'height_pref': '50-100',
+#     'weight_pref': '150-200',
+#     'habbits': 'smoking'
 # })
-# print(res.json())
+
+res = requests.put('http://127.0.0.1:5000/user_preferences', json={
+    'login': 'Egorik222',
+    'age_pref': '19-20',
+    'height_pref': '150-200',
+    'weight_pref': '50-100',
+    'habbits': 'no smoking'
+})
+print(res.json())
 # import requests
 #
 # res = requests.post('http://127.0.0.1:5000/user_info', json={
@@ -41,8 +49,8 @@ import requests
 # print(res.json())
 
 
-res = requests.get('http://127.0.0.1:5000/user_info/Egorik2242')
-print(res.json())
+# res = requests.get('http://127.0.0.1:5000/user_info/Egorik2242')
+# print(res.json())
 # from s3 import s3
 # # photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
 # photo = 'D:\PycharmProjects\Backend_Egor\photos\w1.jpg'
