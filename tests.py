@@ -19,35 +19,36 @@
 
 import requests
 
-# res = requests.post('http://127.0.0.1:5000/user_preferences', json={
-#     'login': 'Egorik222',
-#     'age_pref': '18-20',
-#     'height_pref': '50-100',
+# res = requests.put('http://127.0.0.1:5000/user_preferences/Egorik222', json={
+#     'age_pref': '18-200',
+#     'height_pref': '50-2100',
 #     'weight_pref': '150-200',
 #     'habbits': 'smoking'
 # })
 
-res = requests.put('http://127.0.0.1:5000/user_preferences', json={
-    'login': 'Egorik222',
-    'age_pref': '19-20',
-    'height_pref': '150-200',
-    'weight_pref': '50-100',
-    'habbits': 'no smoking'
-})
-print(res.json())
+# res = requests.post('http://127.0.0.1:5000/registration', json={
+#     'name': "Колобок тестовый",
+#     'login': 'kolobok2004',
+#     'password': '1',
+#     'age': 15,
+#     'sex': 'Male'
+# })
+json = {
+    'age': ['lox', 'pidr', 20]
+}
+print(json['age'][0])
+# print(res.json())
 # import requests
 #
-# res = requests.post('http://127.0.0.1:5000/user_info', json={
-#     'login': 'Egorik222',
-#     'about_me': 'Egorik12',
+# res = requests.put('http://127.0.0.1:5000/user_info/Egorik222', json={
+#     'about_me': 'Egorikreqwrqwerqwr1233224',
 #     'interests': 'Egor21',
 #     'z': 'абракадабра',
 #     'height': 'dada',
 #     'education': 'fdsfsdfs'
 # })
-# #
+#
 # print(res.json())
-
 
 # res = requests.get('http://127.0.0.1:5000/user_info/Egorik2242')
 # print(res.json())
