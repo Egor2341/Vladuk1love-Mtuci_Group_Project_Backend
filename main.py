@@ -68,58 +68,12 @@ def registration():
     return {'access': 'Пользователь создан', 'status_code': 200}
     # return jsonify({'access': 'OK'})
 
-
-# @app.route('/user_info/<user_login>', methods=['POST'])
-# def update_user_info(user_login):
-#     db_sess = db_session.create_session()
-#     params = request.json
-#     user = db_sess.query(User).filter_by(login=user_login).first()
-#     if db_sess.query(Info).filter(Info.user_login == user_login).first():
-#         return {'access': 'Используйте метод PUT, чтобы перезаписать данные'}
-#     if user:
-#         if request.method == 'POST':
-#             dop_info = Info(
-#                 about_me=params['about_me'],
-#                 interests=params['interests'],
-#                 z=params['z'],
-#                 height=params['height'],
-#                 education=params['education']
-#             )
-#             user.add_info = dop_info
-#             db_sess.commit()
-#             db_sess.add(dop_info)
-#             return {'access': 'Информация добавлена', 'status_code': 200}
-#     return {'access': 'Пользователь не найден', 'status_code': 404}
-#
-#
-# @app.route('/user_preferences/<user_login>', methods=['POST'])
-# def update_user_preferences(user_login):
-#     db_sess = db_session.create_session()
-#     params = request.json
-#     user = db_sess.query(User).filter_by(login=user_login).first()
-#     if db_sess.query(Preference).filter(Preference.user_login == user_login).first():
-#         return {'access': 'Используйте метод PUT, чтобы перезаписать данные'}
-#     if user:
-#         if request.method == 'POST':
-#             pref = Preference(
-#                 age_pref=params['age_pref'],
-#                 height_pref=params['height_pref'],
-#                 weight_pref=params['weight_pref'],
-#                 habbits=params['habbits']
-#             )
-#             user.preferences = pref
-#             db_sess.commit()
-#             db_sess.add(pref)
-#             return {'access': 'Информация добавлена'}
-#     return {'access': 'Пользователь не найден'}
-
-
 @app.route('/login', methods=['POST'])
 def login():
     db_sess = db_session.create_session()
     params = request.json
     user = db_sess.query(User).filter_by(login=params['login']).first()
-    if user:
+    if not user:
         return {'access': 'Неверно указан логин', 'status_code': 404}
     if not user.check_password(params['password']):
         return {'access': 'Неверно указан пароль', 'status_code': 406}
@@ -148,12 +102,12 @@ def get_user_info(user_login):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
-        return jsonify({'headers': {'access': 'Всё прошло удачно', 'status_code': 200},
-                        'about_me': user.add_info.about_me,
-                        'interests': user.add_info.interests,
-                        'z': user.add_info.z,
-                        'height': user.add_info.height,
-                        'education': user.add_info.education
+        return jsonify({
+                        'about_me': ['О себе', user.add_info.about_me],
+                        'interests': ['Интересы', user.add_info.interests],
+                        'z': ['Знак зодиака', user.add_info.z],
+                        'height': ['Рост', user.add_info.height],
+                        'education': ['Карьера и Образование', user.add_info.education]
                         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
@@ -165,11 +119,11 @@ def post_user_info(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         db_sess.query(Info).filter_by(user_login=user.login). \
-            update({'about_me': params['about_me'],
-                    'interests': params['interests'],
-                    'z': params['z'],
-                    'height': params['height'],
-                    'education': params['education']})
+            update({'about_me': params['about_me'][1],
+                    'interests': params['interests'][1],
+                    'z': params['z'][1],
+                    'height': params['height'][1],
+                    'education': params['education'][1]})
         db_sess.commit()
         return {'access': 'Данные перезаписаны', 'status_code': 200}
     return {'access': 'Пользователь не найден', 'status_code': 404}
@@ -181,11 +135,11 @@ def get_user_preferences(user_login):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
-        return jsonify({'headers': {'access': 'Всё прошло удачно', 'status_code': 200},
-                        'age_pref': user.preferences.age_pref,
-                        'height_pref': user.preferences.height_pref,
-                        'weight_pref': user.preferences.weight_pref,
-                        'habbits': user.preferences.habbits,
+        return jsonify({
+                        'age_pref': ['Возраст', user.preferences.age_pref],
+                        'height_pref': ['Рост', user.preferences.height_pref],
+                        'weight_pref': ['Вес', user.preferences.weight_pref],
+                        'habbits': ['Вредные привычки', user.preferences.habbits],
                         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
@@ -197,10 +151,10 @@ def post_user_preferences(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         db_sess.query(Preference).filter_by(user_login=user_login). \
-            update({'age_pref': params['age_pref'],
-                    'height_pref': params['height_pref'],
-                    'weight_pref': params['weight_pref'],
-                    'habbits': params['habbits']})
+            update({'age_pref': params['age_pref'][1],
+                    'height_pref': params['height_pref'][1],
+                    'weight_pref': params['weight_pref'][1],
+                    'habbits': params['habbits'][1]})
         db_sess.commit()
         return {'access': 'Данные перезаписаны', 'status_code': 200}
     return {'access': 'Пользователь не найден', 'status_code': 404}
