@@ -9,7 +9,7 @@ class Profile(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False, unique=True)
-    likes = sqlalchemy.Column(sqlalchemy.Integer)
-    description = sqlalchemy.Column(sqlalchemy.Text, nullable=False)
-    user = relationship('User', back_populates='profile', uselist=False)
+    user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False)
+    description = sqlalchemy.Column(sqlalchemy.Text)
+
+    user = relationship('data.users.User', back_populates='profile', uselist=False)

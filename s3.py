@@ -34,6 +34,7 @@ class S3:
         except botocore.exceptions.ClientError:
             raise FileNotFoundError("File not found")
 
+
     def delete_file(self, fileid: str):
         self.s3client.delete_object(Bucket=settings.AWS_BUCKET, Key=fileid)
 

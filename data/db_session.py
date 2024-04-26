@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session, declarative_base
 
 SqlAlchemyBase = declarative_base()
 __factory = None
+
+
 def global_init(db_file):
     global __factory
 
@@ -15,9 +17,8 @@ def global_init(db_file):
 
     conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
     print(f"Подключение к базе данных по адресу {conn_str}")
-
     engine = sa.create_engine(conn_str)
-    __factory = orm.sessionmaker(bind=engine)
+    __factory = orm.sessionmaker(bind=engine, autoflush=True)
     if __factory is None:
         raise Exception('wtf')
     from . import __all_models
