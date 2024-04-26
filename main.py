@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, redirect
+from flask import Flask, request, jsonify, redirect, send_file, Response
 from werkzeug.utils import secure_filename
 
 from data import db_session
@@ -11,7 +11,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
-# from s3 import s3
+from s3 import s3
 from settings import settings
 
 from sqlalchemy.exc import IntegrityError, NoResultFound
@@ -165,8 +165,8 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
-@app.route('/photos/<user_login>', methods=['GET', 'POST'])
-def photos(user_login):
+@app.route('/up_photos/<user_login>', methods=['GET', 'POST'])
+def up_photos(user_login):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(user_login == User.login).all() != []:
         if request.method == 'POST':
@@ -178,16 +178,21 @@ def photos(user_login):
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 s3.upload_file(file, f'{user_login}_{filename}')
-                photo = Photo(
-                    user_login=user_login,
-                    img=settings.AWS_BUCKET,
-                    name=filename
-                )
+                photo = Photo(img_s3_location=f'{user_login}_{filename}')
+                photo.user_login = user_login
                 db_sess.add(photo)
                 db_sess.commit()
                 return {'access': 'photo uploaded'}
     return {'access': 'nothing'}
 
+
+@app.route('/down_photos/<user_login>', methods=['GET', 'POST'])
+def down_photos(user_login):
+    db_sess = db_session.create_session()
+    if db_sess.query(User).filter(user_login == User.login).all() != []:
+        if request.method == 'POST':
+            photo = db_sess.query(Photo).filter(user_login == user_login).one()
+            return photo.s3_url
 
 def main():
     db_session.global_init('db/data_of_users.db')

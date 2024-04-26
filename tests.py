@@ -14,9 +14,9 @@
 # files = {
 #     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
 # }
-# res = requests.post('http://127.0.0.1:5000/photos/Egorik', files=files)
+# res = requests.post('http://127.0.0.1:5000/up_photos/Egorik', files=files)
 # print(res.text)
-
+#
 import requests
 
 # res = requests.put('http://127.0.0.1:5000/user_preferences/Egorik222', json={
@@ -27,17 +27,20 @@ import requests
 # })
 
 # res = requests.post('http://127.0.0.1:5000/registration', json={
-#     'name': "Колобок тестовый",
-#     'login': 'kolobok2004',
-#     'password': '1',
+#     'name': "Egor",
+#     'login': 'Egorik',
+#     'password': '1111',
 #     'age': 15,
 #     'sex': 'Male'
 # })
-json = {
-    'age': ['lox', 'pidr', 20]
-}
-print(json['age'][0])
 # print(res.json())
+
+# json = {
+#     'age': ['lox', 'pidr', 20]
+# }
+#
+# print(json['age'][0])
+
 # import requests
 #
 # res = requests.put('http://127.0.0.1:5000/user_info/Egorik222', json={
@@ -52,11 +55,14 @@ print(json['age'][0])
 
 # res = requests.get('http://127.0.0.1:5000/user_info/Egorik2242')
 # print(res.json())
-# from s3 import s3
+
+from s3 import s3
 # # photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
-# photo = 'D:\PycharmProjects\Backend_Egor\photos\w1.jpg'
+# photo = 'w1.jpg'
 # with open(photo, 'wb') as data:
-#     s3.download_file(data, '1')
+#     s3.download_file(data, 'Egorik_e8738644ceea3c8a3d29a798e71004d9.jpg')
+# s3.download_file('w2.jpg', 'Egorik_e8738644ceea3c8a3d29a798e71004d9.jpg')
+
 
 # import requests
 #
@@ -66,3 +72,9 @@ print(json['age'][0])
 # })
 #
 # print(res.json())
+
+
+res = requests.post('http://127.0.0.1:5000/down_photos/Egorik')
+print(res.text)
+
+
