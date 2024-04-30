@@ -10,7 +10,7 @@
 # import os
 # import requests
 #
-# photo = "D:\wall\e8738644ceea3c8a3d29a798e71004d9.jpg"
+# photo = "D:\wall\Photoleap_13_03_2024_19_13_31_r0wKI.jpg"
 # files = {
 #     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
 # }
@@ -73,7 +73,7 @@ from s3 import s3
 #
 # print(res.json())
 
-
+#
 res = requests.post('http://127.0.0.1:5000/down_photos/Egorik')
 print(res.text)
 
