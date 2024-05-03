@@ -95,14 +95,14 @@ def get_user_info(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         return jsonify({
-            'name': ['Имя', user.name],
-            'age': ['Возраст', user.age],
-            'sex': ['Пол', user.sex],
-            'about_me': ['О себе', user.add_info.about_me],
-            'interests': ['Интересы', user.add_info.interests],
-            'group': ['Группа в МТУСИ', user.add_info.group],
-            'dating_purpose': ['Цель знакомства', user.add_info.dating_purpose],
-            'education': ['Карьера и Образование', user.add_info.education]
+            'name': user.name,
+            'age': user.age,
+            'sex': user.sex,
+            'about_me': user.add_info.about_me,
+            'interests': user.add_info.interests,
+            'group': user.add_info.group,
+            'dating_purpose': user.add_info.dating_purpose,
+            'education': user.add_info.education
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
@@ -114,11 +114,11 @@ def post_user_info(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         db_sess.query(Info).filter_by(user_login=user.login). \
-            update({'about_me': params['about_me'][1],
-                    'interests': params['interests'][1],
-                    'group': params['group'][1],
-                    'dating_purpose': params['dating_purpose'][1],
-                    'education': params['education'][1]})
+            update({'about_me': params['about_me'],
+                    'interests': params['interests'],
+                    'group': params['group'],
+                    'dating_purpose': params['dating_purpose'],
+                    'education': params['education']})
         db_sess.commit()
         return {'access': 'Данные перезаписаны', 'status_code': 200}
     return {'access': 'Пользователь не найден', 'status_code': 404}
@@ -131,12 +131,12 @@ def get_user_preferences(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         return jsonify({
-            'age_pref': ['Возраст', user.preferences.age_pref],
-            'height_pref': ['Рост', user.preferences.height_pref],
-            'weight_pref': ['Вес', user.preferences.weight_pref],
-            'type': ['Тип внешности', user.preferences.type],
-            'habits': ['Вредные привычки', user.preferences.habbits],
-            'religion': ['Религия', user.preferences.religion]
+            'age_pref': user.preferences.age_pref,
+            'height_pref': user.preferences.height_pref,
+            'weight_pref': user.preferences.weight_pref,
+            'type': user.preferences.type,
+            'habits': user.preferences.habbits,
+            'religion': user.preferences.religion
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
@@ -148,12 +148,12 @@ def post_user_preferences(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         db_sess.query(Preference).filter_by(user_login=user_login). \
-            update({'age_pref': params['age_pref'][1],
-                    'height_pref': params['height_pref'][1],
-                    'weight_pref': params['weight_pref'][1],
-                    'type': params['type'][1],
-                    'habits': params['habits'][1],
-                    'religion': params['religion'][1]})
+            update({'age_pref': params['age_pref'],
+                    'height_pref': params['height_pref'],
+                    'weight_pref': params['weight_pref'],
+                    'type': params['type'],
+                    'habits': params['habits'],
+                    'religion': params['religion']})
         db_sess.commit()
         return {'access': 'Данные перезаписаны', 'status_code': 200}
     return {'access': 'Пользователь не найден', 'status_code': 404}
@@ -195,34 +195,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# groups = [
-#     {'value': 'БЭИ-2301', 'label': 'БЭИ-2301'},
-#     {'value': 'БЭИ-2302', 'label': 'БЭИ-2302'},
-#     {'value': 'БЭИ-2303', 'label': 'БЭИ-2303'},
-#
-#     {'value': 'БВТ-2301', 'label': 'БВТ-2301'},
-#     {'value': 'БВТ-2302', 'label': 'БВТ-2302'},
-#     {'value': 'БВТ-2303', 'label': 'БВТ-2303'},
-#     {'value': 'БВТ-2304', 'label': 'БВТ-2304'},
-#     {'value': 'БВТ-2305', 'label': 'БВТ-2305'},
-#     {'value': 'БВТ-2306', 'label': 'БВТ-2306'},
-#     {'value': 'БВТ-2307', 'label': 'БВТ-2307'},
-#     {'value': 'БВТ-2308', 'label': 'БВТ-2308'},
-#
-#     {'value': 'БПИ-2301', 'label': 'БПИ-2301'},
-#     {'value': 'БПИ-2302', 'label': 'БПИ-2302'},
-#     {'value': 'БПИ-2303', 'label': 'БПИ-2303'},
-#     {'value': 'БПИ-2304', 'label': 'БПИ-2304'},
-#     {'value': 'БПИ-2305', 'label': 'БПИ-2305'},
-#     {'value': 'БПИ-2306', 'label': 'БПИ-2306'},
-#
-#     {'value': 'БСТ-2301', 'label': 'БСТ-2301'},
-#     {'value': 'БСТ-2302', 'label': 'БСТ-2302'},
-#     {'value': 'БСТ-2303', 'label': 'БСТ-2303'},
-#     {'value': 'БСТ-2304', 'label': 'БСТ-2304'},
-#
-#     {'value': 'БФИ-2301', 'label': 'БФИ-2301'},
-#     {'value': 'БФИ-2302', 'label': 'БФИ-2302'}
-#
-# ]
