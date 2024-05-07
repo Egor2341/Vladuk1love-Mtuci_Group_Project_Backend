@@ -131,7 +131,7 @@ def get_user_preferences(user_login):
             'height_pref': user.preferences.height_pref,
             'weight_pref': user.preferences.weight_pref,
             'type': user.preferences.type,
-            'habits': user.preferences.habbits,
+            'habits': user.preferences.habits,
             'religion': user.preferences.religion
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
