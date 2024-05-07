@@ -51,13 +51,9 @@ def registration():
         user.preferences = pref
         db_sess.commit()
         db_sess.add(pref)
-
+        return {'access': 'Пользователь создан', 'status_code': 200}
     else:
         return {'access': 'Такой пользователь уже существует'}
-    # token = user.get_token()
-
-    return {'access': 'Пользователь создан', 'status_code': 200}
-    # return jsonify({'access': 'OK'})
 
 
 @app.route('/login', methods=['POST'])
@@ -193,6 +189,7 @@ def down_photos(user_login):
             photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[0]
             return photo.s3_url
     return {'access': 'Login not found'}
+
 
 def main():
     db_session.global_init('db/data_of_users.db')
