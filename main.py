@@ -186,7 +186,7 @@ def down_photos(user_login):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(user_login == User.login).all() != []:
         if request.method == 'POST':
-            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[0]
+            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[-1]
             return photo.s3_url
     return {'access': 'Login not found'}
 
