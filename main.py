@@ -11,7 +11,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
-from s3 import s3
+# from s3 import s3
 from settings import settings
 
 from sqlalchemy.exc import IntegrityError, NoResultFound
@@ -131,7 +131,7 @@ def get_user_preferences(user_login):
             'height_pref': user.preferences.height_pref,
             'weight_pref': user.preferences.weight_pref,
             'type': user.preferences.type,
-            'habits': user.preferences.habbits,
+            'habits': user.preferences.habits,
             'religion': user.preferences.religion
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
