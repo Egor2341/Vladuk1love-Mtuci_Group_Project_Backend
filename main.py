@@ -79,35 +79,24 @@ def find_users(user_login):
     params = request.json
     db_sess = db_session.create_session()
     logined_user = db_sess.query(User).filter_by(login=user_login).first()
-    response = {
-        'user0': {},
-        'user1': {},
-        'user2': {},
-        'user3': {},
-        'user4': {},
-        'user5': {},
-        'user6': {},
-        'user7': {}
-
-    }
+    response = {}
     if logined_user:
         users_8 = db_sess.query(User) \
-            .where(and_(User.login != logined_user.login)) \
+            .filter(User.login != logined_user.login,
+                    User.age.between(*params['age']),
+                    User.sex.in_(params['sex']),
+                    User.add_info.has(Info.dating_purpose.in_(params['dating_purpose']))
+                    ) \
             .order_by(func.random()).limit(8).all()
         for i in range(len(users_8)):
             response[f'user{i}'] = {'name': users_8[i].name,
                                     'login': users_8[i].login,
                                     'age': users_8[i].age,
                                     'sex': users_8[i].sex,
+                                    'dating_purpose': users_8[i].add_info.dating_purpose,
                                     'photo': [i.img_s3_location for i in users_8[i].photos]
                                     }
         return jsonify(response)
-
-        # )
-        # photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[-1]
-        # return photo.s3_url
-        # filters = request.json
-        # return {'sex': filters['sex'], 'user_login': user_login}
 
 
 @app.route('/profile/<user_login>', methods=['GET'])

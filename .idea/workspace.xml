@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="refactoring">
+    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="get 8 random cards">
+      <change afterPath="$PROJECT_DIR$/db/data_of_users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,8 +139,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test_client" />
-        <item itemvalue="Python.tests" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.tests" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.tests" />
       </list>
@@ -236,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714395431145</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="get 8 random cards">
+      <option name="closed" value="true" />
+      <created>1715271406756</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1715271406756</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -272,6 +278,7 @@
     <MESSAGE value="cors" />
     <MESSAGE value="add user_preferences" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="get 8 random cards" />
+    <option name="LAST_COMMIT_MESSAGE" value="get 8 random cards" />
   </component>
 </project>
