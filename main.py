@@ -74,7 +74,7 @@ def login():
     return {'access': 'Все указано верно', 'status_code': 200}
 
 
-@app.route('/found_users_on_the_main_page/<user_login>', methods=['GET'])
+@app.route('/found_users_on_the_main_page/<user_login>', methods=['POST'])
 def find_users(user_login):
     params = request.json
     db_sess = db_session.create_session()
@@ -160,7 +160,7 @@ def get_user_preferences(user_login):
             'height_pref': user.preferences.height_pref,
             'weight_pref': user.preferences.weight_pref,
             'type': user.preferences.type,
-            'habits': user.preferences.habbits,
+            'habits': user.preferences.habits,
             'religion': user.preferences.religion
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
