@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="smth">
-      <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" />
+    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="get 8 random cards">
+      <change afterPath="$PROJECT_DIR$/db/data_of_users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_client.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,17 +58,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "Python.tests.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Dev",
-    "last_opened_file_path": "C:/Users/Давид/Flask_Server/Vladuk1love-Mtuci_Group_Project_Backend"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tests.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;devDavid&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Давид/Flask_Server/Vladuk1love-Mtuci_Group_Project_Backend&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.main">
+}</component>
+  <component name="RunManager" selected="Python.test_client">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Vladuk1love-Mtuci_Group_Project_Backend" />
       <option name="ENV_FILES" value="" />
@@ -81,6 +84,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_client" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Vladuk1love-Mtuci_Group_Project_Backend" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_client.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -113,11 +138,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test_client" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.tests" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.tests" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -209,23 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714395431145</updated>
     </task>
-    <task id="LOCAL-00010" summary="habist">
+    <task id="LOCAL-00010" summary="get 8 random cards">
       <option name="closed" value="true" />
-      <created>1715094415008</created>
+      <created>1715271406756</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1715094415008</updated>
+      <updated>1715271406756</updated>
     </task>
-    <task id="LOCAL-00011" summary="smth">
-      <option name="closed" value="true" />
-      <created>1715094611397</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1715094611397</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -261,8 +278,7 @@
     <MESSAGE value="cors" />
     <MESSAGE value="add user_preferences" />
     <MESSAGE value="refactoring" />
-    <MESSAGE value="habist" />
-    <MESSAGE value="smth" />
-    <option name="LAST_COMMIT_MESSAGE" value="smth" />
+    <MESSAGE value="get 8 random cards" />
+    <option name="LAST_COMMIT_MESSAGE" value="get 8 random cards" />
   </component>
 </project>

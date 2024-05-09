@@ -14,7 +14,8 @@ from config import Config
 from s3 import s3
 from settings import settings
 
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.sql import func
+from sqlalchemy import and_
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -71,8 +72,31 @@ def login():
     if not user.check_password(params['password']):
         return {'access': 'Неверно указан пароль', 'status_code': 406}
     return {'access': 'Все указано верно', 'status_code': 200}
-    # token = user.get_token()
-    # return {'access_token': token}
+
+
+@app.route('/found_users_on_the_main_page/<user_login>', methods=['GET'])
+def find_users(user_login):
+    params = request.json
+    db_sess = db_session.create_session()
+    logined_user = db_sess.query(User).filter_by(login=user_login).first()
+    response = {}
+    if logined_user:
+        users_8 = db_sess.query(User) \
+            .filter(User.login != logined_user.login,
+                    User.age.between(*params['age']),
+                    User.sex.in_(params['sex']),
+                    User.add_info.has(Info.dating_purpose.in_(params['dating_purpose']))
+                    ) \
+            .order_by(func.random()).limit(8).all()
+        for i in range(len(users_8)):
+            response[f'user{i}'] = {'name': users_8[i].name,
+                                    'login': users_8[i].login,
+                                    'age': users_8[i].age,
+                                    'sex': users_8[i].sex,
+                                    'dating_purpose': users_8[i].add_info.dating_purpose,
+                                    'photo': [i.img_s3_location for i in users_8[i].photos]
+                                    }
+        return jsonify(response)
 
 
 @app.route('/profile/<user_login>', methods=['GET'])
@@ -136,7 +160,7 @@ def get_user_preferences(user_login):
             'height_pref': user.preferences.height_pref,
             'weight_pref': user.preferences.weight_pref,
             'type': user.preferences.type,
-            'habits': user.preferences.habits,
+            'habits': user.preferences.habbits,
             'religion': user.preferences.religion
         })
     return {'access': 'Пользователь не найден', 'status_code': 404}
@@ -165,8 +189,8 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
-@app.route('/up_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
-def up_photos(user_login, avatar):
+@app.route('/up_photos/<user_login>', methods=['GET', 'POST'])
+def up_photos(user_login):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(user_login == User.login).first()
     if user:
@@ -177,29 +201,29 @@ def up_photos(user_login, avatar):
             if file.filename == '':
                 return 'not filename'
             if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                s3.upload_file(file, f'{user_login}_{filename}')
                 photos = [i.img_s3_location for i in user.photos]
-                name = 'avatar' if avatar == 'avatar' else 'img' + str(len(photos))
-                s3.upload_file(file, f'{user_login}_{name}')
-                if photos[0] == '':
+                if photos:
                     db_sess.query(Photo).filter(user.login == Photo.user_login).update(
-                        {'img_s3_location': f'{user_login}_{name}'})
+                        {'img_s3_location': f'{user_login}_{filename}'})
                     db_sess.commit()
-                elif photos:
-                    photo = Photo(img_s3_location=f'{user_login}_{name}')
+                elif user.photos.img_s3_location:
+                    photo = Photo(img_s3_location=f'{user_login}_{filename}')
                     photo.user_img = user
                     db_sess.add(photo)
-                    db_sess.commit()
+
                 return {'access': 'photo uploaded'}
     return {'access': 'nothing'}
 
 
-@app.route('/down_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
-def down_photos(user_login, avatar):
+@app.route('/down_photos/<user_login>', methods=['GET', 'POST'])
+def down_photos(user_login):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(user_login == User.login).first():
         if request.method == 'POST':
-            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))
-            return list(map(lambda x: x.s3_url, photo))
+            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[0]
+            return photo.s3_url
     return {'access': 'Login not found'}
 
 

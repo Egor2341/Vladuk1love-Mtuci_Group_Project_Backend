@@ -7,17 +7,17 @@
 #     assert res.get_json()[0]['id'] == 1
 
 
-# import os
-# import requests
-#
-# photo = "D:\wall\Photoleap_13_03_2024_19_13_31_r0wKI.jpg"
-# files = {
-#     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
-# }
-# res = requests.post('http://127.0.0.1:5000/up_photos/Egorik', files=files)
-# print(res.text)
-#
+import os
 import requests
+
+photo = r"C:\Users\Давид\Downloads\i.jpg"
+files = {
+    'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
+}
+res = requests.post('http://127.0.0.1:5000/up_photos/dawud1', files=files)
+print(res.text)
+#
+# import requests
 
 # res = requests.put('http://127.0.0.1:5000/user_preferences/Egorik222', json={
 #     'age_pref': '18-200',

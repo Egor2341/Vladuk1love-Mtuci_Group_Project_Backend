@@ -31,7 +31,6 @@ class User(SqlAlchemyBase, UserMixin):
         )
         return token
 
-
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
