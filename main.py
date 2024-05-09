@@ -11,7 +11,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
-# from s3 import s3
+from s3 import s3
 from settings import settings
 
 from sqlalchemy.exc import IntegrityError, NoResultFound
@@ -51,6 +51,11 @@ def registration():
         user.preferences = pref
         db_sess.commit()
         db_sess.add(pref)
+
+        photo = Photo(img_s3_location='')
+        photo.user_img = user
+        db_sess.add(photo)
+        db_sess.commit()
         return {'access': 'Пользователь создан', 'status_code': 200}
     else:
         return {'access': 'Такой пользователь уже существует'}
@@ -160,10 +165,11 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
-@app.route('/up_photos/<user_login>', methods=['GET', 'POST'])
-def up_photos(user_login):
+@app.route('/up_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
+def up_photos(user_login, avatar):
     db_sess = db_session.create_session()
-    if db_sess.query(User).filter(user_login == User.login).all() != []:
+    user = db_sess.query(User).filter(user_login == User.login).first()
+    if user:
         if request.method == 'POST':
             if 'file' not in request.files:
                 return 'not file'
@@ -171,20 +177,26 @@ def up_photos(user_login):
             if file.filename == '':
                 return 'not filename'
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                s3.upload_file(file, f'{user_login}_{filename}')
-                photo = Photo(img_s3_location=f'{user_login}_{filename}')
-                photo.user_login = user_login
-                db_sess.add(photo)
-                db_sess.commit()
+                photos = [i.img_s3_location for i in user.photos]
+                name = 'avatar' if avatar == 'avatar' else 'img' + str(len(photos))
+                s3.upload_file(file, f'{user_login}_{name}')
+                if photos[0] == '':
+                    db_sess.query(Photo).filter(user.login == Photo.user_login).update(
+                        {'img_s3_location': f'{user_login}_{name}'})
+                    db_sess.commit()
+                elif photos:
+                    photo = Photo(img_s3_location=f'{user_login}_{name}')
+                    photo.user_img = user
+                    db_sess.add(photo)
+                    db_sess.commit()
                 return {'access': 'photo uploaded'}
     return {'access': 'nothing'}
 
 
-@app.route('/down_photos/<user_login>', methods=['GET', 'POST'])
-def down_photos(user_login):
+@app.route('/down_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
+def down_photos(user_login, avatar):
     db_sess = db_session.create_session()
-    if db_sess.query(User).filter(user_login == User.login).all() != []:
+    if db_sess.query(User).filter(user_login == User.login).first():
         if request.method == 'POST':
             photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))
             return list(map(lambda x: x.s3_url, photo))

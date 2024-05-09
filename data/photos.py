@@ -14,7 +14,7 @@ class Photo(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     user_login = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey('users.login'), nullable=False)
     user_img = relationship('data.users.User', back_populates='photos', uselist=False)
-    img_s3_location = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    img_s3_location = sqlalchemy.Column(sqlalchemy.String)
 
     def __init__(self, img_s3_location: str):
         self.img_s3_location = img_s3_location
