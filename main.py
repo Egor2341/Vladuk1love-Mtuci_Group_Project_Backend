@@ -14,7 +14,8 @@ from config import Config
 from s3 import s3
 from settings import settings
 
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.sql import func
+from sqlalchemy import and_
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -51,6 +52,11 @@ def registration():
         user.preferences = pref
         db_sess.commit()
         db_sess.add(pref)
+
+        photo = Photo(img_s3_location='')
+        photo.user_img = user
+        db_sess.add(photo)
+        db_sess.commit()
         return {'access': 'Пользователь создан', 'status_code': 200}
     else:
         return {'access': 'Такой пользователь уже существует'}
@@ -66,8 +72,42 @@ def login():
     if not user.check_password(params['password']):
         return {'access': 'Неверно указан пароль', 'status_code': 406}
     return {'access': 'Все указано верно', 'status_code': 200}
-    # token = user.get_token()
-    # return {'access_token': token}
+
+
+@app.route('/found_users_on_the_main_page/<user_login>', methods=['GET'])
+def find_users(user_login):
+    params = request.json
+    db_sess = db_session.create_session()
+    logined_user = db_sess.query(User).filter_by(login=user_login).first()
+    response = {
+        'user0': {},
+        'user1': {},
+        'user2': {},
+        'user3': {},
+        'user4': {},
+        'user5': {},
+        'user6': {},
+        'user7': {}
+
+    }
+    if logined_user:
+        users_8 = db_sess.query(User) \
+            .where(and_(User.login != logined_user.login)) \
+            .order_by(func.random()).limit(8).all()
+        for i in range(len(users_8)):
+            response[f'user{i}'] = {'name': users_8[i].name,
+                                    'login': users_8[i].login,
+                                    'age': users_8[i].age,
+                                    'sex': users_8[i].sex,
+                                    'photo': [i.img_s3_location for i in users_8[i].photos]
+                                    }
+        return jsonify(response)
+
+        # )
+        # photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[-1]
+        # return photo.s3_url
+        # filters = request.json
+        # return {'sex': filters['sex'], 'user_login': user_login}
 
 
 @app.route('/profile/<user_login>', methods=['GET'])
@@ -163,7 +203,8 @@ def allowed_file(filename):
 @app.route('/up_photos/<user_login>', methods=['GET', 'POST'])
 def up_photos(user_login):
     db_sess = db_session.create_session()
-    if db_sess.query(User).filter(user_login == User.login).all() != []:
+    user = db_sess.query(User).filter(user_login == User.login).first()
+    if user:
         if request.method == 'POST':
             if 'file' not in request.files:
                 return 'not file'
@@ -173,10 +214,16 @@ def up_photos(user_login):
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 s3.upload_file(file, f'{user_login}_{filename}')
-                photo = Photo(img_s3_location=f'{user_login}_{filename}')
-                photo.user_login = user_login
-                db_sess.add(photo)
-                db_sess.commit()
+                photos = [i.img_s3_location for i in user.photos]
+                if photos:
+                    db_sess.query(Photo).filter(user.login == Photo.user_login).update(
+                        {'img_s3_location': f'{user_login}_{filename}'})
+                    db_sess.commit()
+                elif user.photos.img_s3_location:
+                    photo = Photo(img_s3_location=f'{user_login}_{filename}')
+                    photo.user_img = user
+                    db_sess.add(photo)
+
                 return {'access': 'photo uploaded'}
     return {'access': 'nothing'}
 
@@ -184,7 +231,7 @@ def up_photos(user_login):
 @app.route('/down_photos/<user_login>', methods=['GET', 'POST'])
 def down_photos(user_login):
     db_sess = db_session.create_session()
-    if db_sess.query(User).filter(user_login == User.login).all() != []:
+    if db_sess.query(User).filter(user_login == User.login).first():
         if request.method == 'POST':
             photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[0]
             return photo.s3_url

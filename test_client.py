@@ -1,9 +1,26 @@
 # from app import client
-from requests import post
+from requests import post, get
+from pprint import pprint
 # res = client.get('/smth')
 # client.post('smth', json={})
-# res = client.post('/login', json={'email': 'bbbb@gmail.com', 'password': "12345"})
+# res = client.
 # res = client.get("/session_test")
-# res = post('http://127.0.0.1:5000/registration', json={'name': 'MY_NEW_USER', 'email': 'WINNER@gmail.com', 'password': "525252"})
-# print(res.get_json())
-
+# for i in range(1, 30):
+res = get('http://127.0.0.1:5000/found_users_on_the_main_page/dawud2', json={'sex': ['Male', 'Female'],
+                                                                             'age': 'any',
+                                                                             'purpose': 'any'})
+js = res.json()
+pprint(js)
+# for i in js.items():
+#     pprint(i)
+# for i in range(1, 30):
+#     res = post('http://127.0.0.1:5000/registration', json={'name': f'david{i}',
+#                                                            'login': f"dawud{i}",
+#                                                            'age': i + 10,
+#                                                            'sex': "Male",
+#                                                            'password': f'pedikules{i}'
+#                                                            })
+#     print(res.json)
+json = {'filters': {'sex': 53,
+                    'age': 'any',
+                    'dating_purpose': 'any'}}
