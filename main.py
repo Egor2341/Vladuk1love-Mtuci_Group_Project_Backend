@@ -97,6 +97,26 @@ def find_users(user_login):
                                     'photo': [i.img_s3_location for i in users_8[i].photos]
                                     }
         return jsonify(response)
+    return {'access': 'Пользователь не найден', 'status_code': 404}
+
+
+@app.route('/card/<user_login>', methods=['POST'])
+def get_card(user_login):
+    params = request.json
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(login=user_login).first()
+    if user:
+        return jsonify(
+            {
+                'name': user.name,
+                'group': user.add_info.group,
+                'age': user.age,
+                'sex': user.sex,
+                'dating_purpose': user.add_info.dating_purpose,
+                'about_me': user.add_info.about_me,
+                'photo': [i.img_s3_location for i in user.photos]
+            }
+        )
 
 
 @app.route('/profile/<user_login>', methods=['GET'])
