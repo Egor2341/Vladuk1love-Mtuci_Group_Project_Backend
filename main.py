@@ -189,8 +189,8 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
-@app.route('/up_photos/<user_login>', methods=['GET', 'POST'])
-def up_photos(user_login):
+@app.route('/up_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
+def up_photos(user_login, avatar):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(user_login == User.login).first()
     if user:
@@ -201,29 +201,29 @@ def up_photos(user_login):
             if file.filename == '':
                 return 'not filename'
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                s3.upload_file(file, f'{user_login}_{filename}')
                 photos = [i.img_s3_location for i in user.photos]
-                if photos:
+                name = 'avatar' if avatar == 'avatar' else 'img' + str(len(photos))
+                s3.upload_file(file, f'{user_login}_{name}')
+                if photos[0] == '':
                     db_sess.query(Photo).filter(user.login == Photo.user_login).update(
-                        {'img_s3_location': f'{user_login}_{filename}'})
+                        {'img_s3_location': f'{user_login}_{name}'})
                     db_sess.commit()
-                elif user.photos.img_s3_location:
-                    photo = Photo(img_s3_location=f'{user_login}_{filename}')
+                elif photos:
+                    photo = Photo(img_s3_location=f'{user_login}_{name}')
                     photo.user_img = user
                     db_sess.add(photo)
-
+                    db_sess.commit()
                 return {'access': 'photo uploaded'}
     return {'access': 'nothing'}
 
 
-@app.route('/down_photos/<user_login>', methods=['GET', 'POST'])
-def down_photos(user_login):
+@app.route('/down_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
+def down_photos(user_login, avatar):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(user_login == User.login).first():
         if request.method == 'POST':
-            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))[0]
-            return photo.s3_url
+            photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))
+            return list(map(lambda x: x.s3_url, photo))
     return {'access': 'Login not found'}
 
 
