@@ -100,7 +100,7 @@ def find_users(user_login):
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
 
-@app.route('/card/<user_login>', methods=['POST'])
+@app.route('/card/<user_login>', methods=['GET'])
 def get_card(user_login):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter_by(login=user_login).first()
@@ -116,6 +116,7 @@ def get_card(user_login):
                 'photo': [i.img_s3_location for i in user.photos]
             }
         )
+    return {'access': 'Пользователь не найден', 'status_code': 404}
 
 
 @app.route('/profile/<user_login>', methods=['GET'])
