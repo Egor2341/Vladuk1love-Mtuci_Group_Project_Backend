@@ -102,7 +102,6 @@ def find_users(user_login):
 
 @app.route('/card/<user_login>', methods=['POST'])
 def get_card(user_login):
-    params = request.json
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
