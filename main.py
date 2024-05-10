@@ -94,7 +94,7 @@ def find_users(user_login):
                                     'age': users_8[i].age,
                                     'sex': users_8[i].sex,
                                     'dating_purpose': users_8[i].add_info.dating_purpose,
-                                    'photo': [i.img_s3_location for i in users_8[i].photos]
+                                    'photo': [i.s3_url for i in users_8[i].photos]
                                     }
         return jsonify(response)
     return {'access': 'Пользователь не найден', 'status_code': 404}
