@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify, redirect, send_file, Response
 from werkzeug.utils import secure_filename
 
@@ -41,6 +43,7 @@ def registration():
         db_sess.commit()
 
         dop_info = Info(
+            dating_purpose='Дружба'
         )
         user.add_info = dop_info
         db_sess.commit()
@@ -52,10 +55,16 @@ def registration():
         db_sess.commit()
         db_sess.add(pref)
 
-        photo = Photo(img_s3_location='')
+        photo = Photo(img_s3_location='avatar')
         photo.user_img = user
         db_sess.add(photo)
         db_sess.commit()
+
+        login = str(params['login'])
+        photo = 'default_photo.png'
+        with open(photo, 'rb') as data:
+            s3.upload_file(data, f'{login}_avatar')
+
         return {'access': 'Пользователь создан', 'status_code': 200}
     else:
         return {'access': 'Такой пользователь уже существует'}
