@@ -113,7 +113,7 @@ def get_card(user_login):
                 'sex': user.sex,
                 'dating_purpose': user.add_info.dating_purpose,
                 'about_me': user.add_info.about_me,
-                'photo': [i.img_s3_location for i in user.photos]
+                'photo': [i.s3_url for i in user.photos]
             }
         )
     return {'access': 'Пользователь не найден', 'status_code': 404}
