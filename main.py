@@ -184,7 +184,7 @@ def up_photos(user_login, avatar):
                     db_sess.query(Photo).filter(user.login == Photo.user_login).update(
                         {'img_s3_location': f'{user_login}_{name}'})
                     db_sess.commit()
-                elif photos:
+                elif not (name == 'avatar' and f'{user_login}_{name}' not in photos):
                     photo = Photo(img_s3_location=f'{user_login}_{name}')
                     photo.user_img = user
                     db_sess.add(photo)
