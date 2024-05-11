@@ -14,7 +14,7 @@ photo = r"C:\Users\Давид\Downloads\i.jpg"
 files = {
     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
 }
-res = requests.post('http://127.0.0.1:5000/up_photos/dawud1', files=files)
+res = requests.post('http://127.0.0.1:5000/up_photos/dawud2/img', files=files)
 print(res.text)
 #
 # import requests

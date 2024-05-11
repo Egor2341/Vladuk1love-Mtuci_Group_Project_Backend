@@ -94,7 +94,7 @@ def find_users(user_login):
                                     'age': users_8[i].age,
                                     'sex': users_8[i].sex,
                                     'dating_purpose': users_8[i].add_info.dating_purpose,
-                                    'photo': [i.img_s3_location for i in users_8[i].photos]
+                                    'photo': [i.s3_url for i in users_8[i].photos]
                                     }
         return jsonify(response)
     return {'access': 'Пользователь не найден', 'status_code': 404}
@@ -113,7 +113,7 @@ def get_card(user_login):
                 'sex': user.sex,
                 'dating_purpose': user.add_info.dating_purpose,
                 'about_me': user.add_info.about_me,
-                'photo': [i.img_s3_location for i in user.photos]
+                'photo': [i.s3_url for i in user.photos]
             }
         )
     return {'access': 'Пользователь не найден', 'status_code': 404}

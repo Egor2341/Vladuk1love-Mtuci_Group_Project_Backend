@@ -7,10 +7,10 @@ from pprint import pprint
 # res = client.
 # res = client.get("/session_test")
 # for i in range(1, 30):
-res = get('http://127.0.0.1:5000/found_users_on_the_main_page/dawud2',
+res = post('http://127.0.0.1:5000/found_users_on_the_main_page/dawud1',
           json={'sex': ['Male', 'Female'],
-                'age': [35, 49],
-                'dating_purpose': ['relationships',]
+                'age': [11, 12],
+                'dating_purpose': ['Отношения']
                 }
           )
 js = res.json()
