@@ -23,6 +23,8 @@ class User(SqlAlchemyBase, UserMixin):
     photos = relationship('data.photos.Photo', back_populates='user_img', uselist=True)
     add_info = relationship('data.additional_information.Info', back_populates='user_info', uselist=False)
     preferences = relationship('data.preferences.Preference', back_populates='user_pref', uselist=False)
+    my_likes = relationship('data.likes.MyLikes', back_populates='user_likes', uselist=True)
+    who_liked_me = relationship('data.likes.WhoLikedMe', back_populates='user_liked_me', uselist=True)
 
     def get_token(self, expire_time=24):
         expire_delta = timedelta(expire_time)

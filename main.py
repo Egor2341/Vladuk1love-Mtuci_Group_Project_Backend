@@ -6,7 +6,7 @@ from data.photos import Photo
 from data.users import User
 from data.additional_information import Info
 from data.preferences import Preference
-
+from data.likes import MyLikes, WhoLikedMe, likes_to_likes_association_table
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
@@ -89,13 +89,15 @@ def find_users(user_login):
                     ) \
             .order_by(func.random()).limit(8).all()
         for i in range(len(users_8)):
-            response[f'user{i}'] = {'name': users_8[i].name,
+            response[f'user{i}'] = {'id': i + 1,
+                                    'name': users_8[i].name,
                                     'login': users_8[i].login,
                                     'age': users_8[i].age,
                                     'sex': users_8[i].sex,
                                     'dating_purpose': users_8[i].add_info.dating_purpose,
                                     'photo': [i.s3_url for i in users_8[i].photos]
                                     }
+
         return jsonify(response)
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
@@ -115,6 +117,41 @@ def get_card(user_login):
                 'about_me': user.add_info.about_me,
                 'photo': [i.s3_url for i in user.photos]
             }
+        )
+    return {'access': 'Пользователь не найден', 'status_code': 404}
+
+
+@app.route('/likes/<user_login>', methods=['POST'])
+def i_liked(user_login):
+    who_i_liked = request.json['who_i_liked']
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(login=user_login).first()
+    if user:
+        i_like = MyLikes(
+            who_i_liked=who_i_liked
+        )
+        i_like.user_login = user_login
+
+        liked_me = WhoLikedMe(
+            user_login=who_i_liked
+        )
+        liked_me.user_who_was_liked = user_login
+
+        db_sess.add_all([i_like, liked_me])
+        db_sess.commit()
+        return jsonify(
+            {'status_code': 200}
+        )
+    return {'access': 'Пользователь не найден', 'status_code': 404}
+
+
+@app.route('/who_liked_me/<user_login>', methods=['GET'])
+def who_liked_me(user_login):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(login=user_login).first()
+    if user:
+        return jsonify(
+            {'users_who_liked_me': [i.user_login for i in user.who_liked_me]}
         )
     return {'access': 'Пользователь не найден', 'status_code': 404}
 
