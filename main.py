@@ -173,10 +173,19 @@ def who_liked_me(user_login):
     return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
-# @app.route('/profile/<user_login>', methods=['GET'])
-# def profile(user_login):
-#     db_sess = db_session.create_session()
-#     info = db_sess.query(User).filter_by(login=user_login).first()
+@app.route('/get_like_from_card/<user_login>', methods=['POST'])
+def get_like_from_card(user_login):
+    card_user = request.json.get('card_login')
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(login=user_login).first()
+    if user:
+        like_exists = db_sess.query(MyLikes).filter_by(user_login=user_login,
+                                                       who_i_liked=card_user
+                                                       ).scalar()
+        return jsonify(
+            {'access': bool(like_exists)}
+        )
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 @app.route('/profile/<user_login>', methods=['GET'])

@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="add gitignore">
+    <list default="true" id="e12bd890-71cf-4ffb-9bb4-bed9b8af2306" name="Changes" comment="queries to the likes table and code refactoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/likes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/likes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/data_of_users.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/data_of_users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/minio-data/.minio.sys/buckets/.bloomcycle.bin/xl.meta" beforeDir="false" afterPath="$PROJECT_DIR$/minio-data/.minio.sys/buckets/.bloomcycle.bin/xl.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/minio-data/.minio.sys/buckets/.usage-cache.bin.bkp/xl.meta" beforeDir="false" afterPath="$PROJECT_DIR$/minio-data/.minio.sys/buckets/.usage-cache.bin.bkp/xl.meta" afterDir="false" />
@@ -302,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715345650066</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="queries to the likes table and code refactoring">
+      <option name="closed" value="true" />
+      <created>1716393983855</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1716393983855</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -355,6 +360,7 @@
     <MESSAGE value="refactoring" />
     <MESSAGE value="get 8 random cards" />
     <MESSAGE value="user`s card(3)" />
-    <option name="LAST_COMMIT_MESSAGE" value="user`s card(3)" />
+    <MESSAGE value="queries to the likes table and code refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="queries to the likes table and code refactoring" />
   </component>
 </project>

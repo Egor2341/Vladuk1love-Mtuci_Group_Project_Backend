@@ -14,7 +14,10 @@ res = post('http://127.0.0.1:5000/likes/egor',
 js = res.json()
 pprint(js)
 
-res = get('http://127.0.0.1:5000/who_liked_me/vlad')
+res = post('http://127.0.0.1:5000/get_like_from_card/egor',
+           json={
+               'card_login': 'sergey'
+           })
 js = res.json()
 pprint(js)
 # for i in js.items():
