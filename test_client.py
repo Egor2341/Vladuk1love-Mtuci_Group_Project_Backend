@@ -8,7 +8,7 @@ from pprint import pprint
 # res = client.get("/session_test")
 # for i in range(1, 30):
 res = post('http://127.0.0.1:5000/likes/egor',
-           json={'who_i_liked': 'vlad'
+           json={'who_i_liked': 'sergey'
                  }
            )
 js = res.json()

@@ -33,8 +33,8 @@ class User(SqlAlchemyBase, UserMixin):
         )
         return token
 
-    def set_password(self, password):
+    def set_password(self, password: str):
         self.password = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

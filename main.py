@@ -1,15 +1,13 @@
-import os
-
-from flask import Flask, request, jsonify, redirect, send_file, Response
-from werkzeug.utils import secure_filename
-
+# импорт flask
+from flask import Flask, request, jsonify
+# импорт моделей
 from data import db_session
 from data.photos import Photo
 from data.users import User
 from data.additional_information import Info
 from data.preferences import Preference
-from data.likes import MyLikes, WhoLikedMe, likes_to_likes_association_table
-from flask_jwt_extended import JWTManager, jwt_required
+from data.likes import MyLikes, WhoLikedMe
+# from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
 
@@ -17,14 +15,14 @@ from s3 import s3
 from settings import settings
 
 from sqlalchemy.sql import func
-from sqlalchemy import and_
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
 
-jwt = JWTManager(app)
+
+# jwt = JWTManager(app)
 
 
 @app.route("/registration", methods=["POST"])
@@ -56,9 +54,7 @@ def registration():
         db_sess.commit()
         db_sess.add(pref)
 
-        login = str(params['login'])
-
-        photo = Photo(img_s3_location=f'{login}_avatar')
+        photo = Photo(img_s3_location=f'{str(params['login'])}_avatar')
         photo.user_img = user
         db_sess.add(photo)
         db_sess.commit()
@@ -67,21 +63,23 @@ def registration():
         with open(photo, 'rb') as data:
             s3.upload_file(data, f'{login}_avatar')
 
-        return {'access': 'Пользователь создан', 'status_code': 200}
+        return jsonify({'access': 'Пользователь создан', 'status_code': 201})
     else:
-        return {'access': 'Такой пользователь уже существует'}
+        return jsonify({'access': 'Такой пользователь уже существует',
+                        'status_code': 403})
 
 
 @app.route('/login', methods=['POST'])
 def login():
     db_sess = db_session.create_session()
-    params = request.json
-    user = db_sess.query(User).filter_by(login=params['login']).first()
+    password = request.json.get('password')
+    login = request.json.get('login')
+    user = db_sess.query(User).filter_by(login=login).first()
     if not user:
-        return {'access': 'Неверно указан логин', 'status_code': 404}
-    if not user.check_password(params['password']):
-        return {'access': 'Неверно указан пароль', 'status_code': 406}
-    return {'access': 'Все указано верно', 'status_code': 200}
+        return jsonify({'access': 'Неверно указан логин', 'status_code': 400})
+    if not user.check_password(password):
+        return jsonify({'access': 'Неверно указан пароль', 'status_code': 400})
+    return jsonify({'access': 'Все указано верно', 'status_code': 200})
 
 
 @app.route('/found_users_on_the_main_page/<user_login>', methods=['POST'])
@@ -133,26 +131,35 @@ def get_card(user_login):
 
 @app.route('/likes/<user_login>', methods=['POST'])
 def i_liked(user_login):
-    who_i_liked = request.json['who_i_liked']
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter_by(login=user_login).first()
-    if user:
-        i_like = MyLikes(
-            who_i_liked=who_i_liked
-        )
-        i_like.user_login = user_login
+    who_i_liked = request.json.get('who_i_liked')
+    if who_i_liked:
+        db_sess = db_session.create_session()
+        count = db_sess.query(func.count()).filter(
+            MyLikes.user_login == user_login,
+            MyLikes.who_i_liked == who_i_liked
+        ).scalar()
+        if count == 0:
+            i_like = MyLikes(
+                who_i_liked=who_i_liked
+            )
+            i_like.user_login = user_login
 
-        liked_me = WhoLikedMe(
-            user_login=who_i_liked
-        )
-        liked_me.user_who_was_liked = user_login
+            liked_me = WhoLikedMe(
+                user_login=who_i_liked
+            )
+            liked_me.user_who_was_liked = user_login
 
-        db_sess.add_all([i_like, liked_me])
-        db_sess.commit()
-        return jsonify(
-            {'status_code': 200}
-        )
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+            db_sess.add_all([i_like, liked_me])
+            db_sess.commit()
+            return jsonify(
+                {'status_code': 200}
+            )
+        else:
+            return jsonify({
+                'access': 'Вы уже лайкнули!', 'status_code': 200
+            })
+
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 @app.route('/who_liked_me/<user_login>', methods=['GET'])
@@ -163,7 +170,13 @@ def who_liked_me(user_login):
         return jsonify(
             {'users_who_liked_me': [i.user_login for i in user.who_liked_me]}
         )
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
+
+
+# @app.route('/profile/<user_login>', methods=['GET'])
+# def profile(user_login):
+#     db_sess = db_session.create_session()
+#     info = db_sess.query(User).filter_by(login=user_login).first()
 
 
 @app.route('/profile/<user_login>', methods=['GET'])
@@ -177,7 +190,7 @@ def profile(user_login):
             'sex': info.sex,
         }
         return jsonify(res)
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 # для доп инфы
@@ -196,7 +209,7 @@ def get_user_info(user_login):
             'dating_purpose': user.add_info.dating_purpose,
             'education': user.add_info.education
         })
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 @app.route('/user_info/<user_login>', methods=['PUT'])
@@ -212,8 +225,8 @@ def post_user_info(user_login):
                     'dating_purpose': params['dating_purpose'],
                     'education': params['education']})
         db_sess.commit()
-        return {'access': 'Данные перезаписаны', 'status_code': 200}
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+        return jsonify({'access': 'Данные перезаписаны', 'status_code': 200})
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 # делаю для предпочтений
@@ -230,7 +243,7 @@ def get_user_preferences(user_login):
             'habits': user.preferences.habits,
             'religion': user.preferences.religion
         })
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 @app.route('/user_preferences/<user_login>', methods=['PUT'])
@@ -247,8 +260,8 @@ def post_user_preferences(user_login):
                     'habits': params['habits'],
                     'religion': params['religion']})
         db_sess.commit()
-        return {'access': 'Данные перезаписаны', 'status_code': 200}
-    return {'access': 'Пользователь не найден', 'status_code': 404}
+        return jsonify({'access': 'Данные перезаписаны', 'status_code': 200})
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
 
 def allowed_file(filename):
@@ -280,8 +293,8 @@ def up_photos(user_login, avatar):
                     photo.user_img = user
                     db_sess.add(photo)
                     db_sess.commit()
-                return {'access': 'photo uploaded'}
-    return {'access': 'nothing'}
+                return jsonify({'access': 'photo uploaded'})
+    return jsonify({'access': 'nothing'})
 
 
 @app.route('/down_photos/<user_login>/<avatar>', methods=['GET', 'POST'])
@@ -294,7 +307,7 @@ def down_photos(user_login, avatar):
                 return photo.s3_url
             photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))
             return list(map(lambda x: x.s3_url, photo))
-    return {'access': 'Login not found'}
+    return jsonify({'access': 'Login not found'})
 
 
 def main():

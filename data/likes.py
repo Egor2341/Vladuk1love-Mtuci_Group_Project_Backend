@@ -8,7 +8,6 @@ likes_to_likes_association_table = sqlalchemy.Table(
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('my_likes_id', sqlalchemy.ForeignKey('my_likes.id'), primary_key=True),
     sqlalchemy.Column('who_liked_me_id', sqlalchemy.ForeignKey('who_liked_me.id'), primary_key=True)
-
 )
 
 
