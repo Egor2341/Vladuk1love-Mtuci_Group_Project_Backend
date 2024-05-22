@@ -134,14 +134,13 @@ def i_liked(user_login):
     who_i_liked = request.json.get('who_i_liked')
     if who_i_liked:
         db_sess = db_session.create_session()
-        count = db_sess.query(MyLikes).filter_by(
-            user_login=user_login,
-            who_i_liked=who_i_liked
-        )
-        print(count.scalar())
-        print(count.count())
-        if count.count() != 0:
-            count.delete()
+        my_like = db_sess.query(MyLikes).filter_by(user_login=user_login, who_i_liked=who_i_liked).first()
+        liked_by = db_sess.query(WhoLikedMe).filter_by(user_login=who_i_liked,
+                                                       user_who_was_liked=user_login).first()
+
+        if my_like and liked_by:
+            db_sess.delete(my_like)
+            db_sess.delete(liked_by)
             db_sess.commit()
             return {'access': 'Лайк успешно удалён', 'status_code': 204}
 
@@ -171,6 +170,17 @@ def who_liked_me(user_login):
     if user:
         return jsonify(
             {'users_who_liked_me': [i.user_login for i in user.who_liked_me]}
+        )
+    return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
+
+
+@app.route('/who_i_liked/<user_login>', methods=['GET'])
+def who_i_liked(user_login):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(login=user_login).first()
+    if user:
+        return jsonify(
+            {'users_who_i_liked': [i.user_login for i in user.my_likes]}
         )
     return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 

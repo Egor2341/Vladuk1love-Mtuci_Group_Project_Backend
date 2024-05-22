@@ -8,18 +8,23 @@ from pprint import pprint
 # res = client.get("/session_test")
 # for i in range(1, 30):
 res = post('http://127.0.0.1:5000/likes/egor',
-           json={'who_i_liked': 'sergey'
+           json={'who_i_liked': 'vlad'
                  }
            )
 js = res.json()
 pprint(js)
 
-res = post('http://127.0.0.1:5000/get_like_from_card/egor',
-           json={
-               'card_login': 'sergey'
-           })
-js = res.json()
-pprint(js)
+# res = post('http://127.0.0.1:5000/get_like_from_card/egor',
+#            json={
+#                'card_login': 'vlad'
+#            })
+# js = res.json()
+# pprint(js)
+#
+# res = get('http://127.0.0.1:5000/who_i_liked/egor')
+# js = res.json()
+# pprint(js)
+
 # for i in js.items():
 #     pprint(i)
 # for i in range(30):
