@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify, redirect, send_file, Response
 from werkzeug.utils import secure_filename
 
@@ -42,6 +44,7 @@ def registration():
         db_sess.commit()
 
         dop_info = Info(
+            dating_purpose='Дружба'
         )
         user.add_info = dop_info
         db_sess.commit()
@@ -53,10 +56,17 @@ def registration():
         db_sess.commit()
         db_sess.add(pref)
 
-        photo = Photo(img_s3_location='')
+        login = str(params['login'])
+
+        photo = Photo(img_s3_location=f'{login}_avatar')
         photo.user_img = user
         db_sess.add(photo)
         db_sess.commit()
+
+        photo = 'default_photo.png'
+        with open(photo, 'rb') as data:
+            s3.upload_file(data, f'{login}_avatar')
+
         return {'access': 'Пользователь создан', 'status_code': 200}
     else:
         return {'access': 'Такой пользователь уже существует'}
@@ -265,7 +275,7 @@ def up_photos(user_login, avatar):
                     db_sess.query(Photo).filter(user.login == Photo.user_login).update(
                         {'img_s3_location': f'{user_login}_{name}'})
                     db_sess.commit()
-                elif photos:
+                elif not (f'{user_login}_{name}' in photos and name == 'avatar'):
                     photo = Photo(img_s3_location=f'{user_login}_{name}')
                     photo.user_img = user
                     db_sess.add(photo)
@@ -279,6 +289,9 @@ def down_photos(user_login, avatar):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(user_login == User.login).first():
         if request.method == 'POST':
+            if avatar == 'avatar':
+                photo = db_sess.query(Photo).filter(f'{user_login}_avatar' == Photo.img_s3_location).first()
+                return photo.s3_url
             photo = list(db_sess.query(Photo).filter(user_login == Photo.user_login))
             return list(map(lambda x: x.s3_url, photo))
     return {'access': 'Login not found'}
