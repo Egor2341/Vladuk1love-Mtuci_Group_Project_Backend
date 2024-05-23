@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
+from sqlalchemy import Engine
 from sqlalchemy.orm import Session, declarative_base
 
 SqlAlchemyBase = declarative_base()
