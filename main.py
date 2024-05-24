@@ -15,8 +15,6 @@ from flask_socketio import SocketIO, emit
 from s3 import s3
 from settings import settings
 
-from waitress import serve
-
 from sqlalchemy.sql import func
 
 app = Flask(__name__)
@@ -28,7 +26,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 socketio = SocketIO(app, cors_allowed_origins="*")
-
+db_session.global_init('db/data_of_users.db')
 
 @socketio.on('message')
 def handle_message(user):
@@ -354,9 +352,7 @@ def down_photos(user_login, avatar):
 
 
 def main():
-    db_session.global_init('db/data_of_users.db')
-    serve(app, host='127.0.0.1', port='5000')
-
+    socketio.run(app, debug=True)
 
 if __name__ == '__main__':
     main()

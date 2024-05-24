@@ -1,5 +1,13 @@
 version: '3.9'
 services:
+    server:
+      container_name: flask_app
+      build: .
+      command: gunicorn --workers=4 --bind 0.0.0.0:5000 main:app
+      ports:
+        - 5000:5000
+      restart: unless-stopped
+
     minio:
       image: minio/minio
       command: server --console-address :9005 /data
