@@ -9,13 +9,13 @@
 
 import os
 import requests
-
-photo = r"C:\Users\Давид\Downloads\i.jpg"
-files = {
-    'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
-}
-res = requests.post('http://127.0.0.1:5000/up_photos/dawud2/img', files=files)
-print(res.text)
+#
+# photo = r"C:\Users\Давид\Downloads\i.jpg"
+# files = {
+#     'file': (os.path.basename(photo), open(photo, 'rb'), 'application/octet-stream')
+# }
+# res = requests.post('http://127.0.0.1:5000/up_photos/dawud2/img', files=files)
+# print(res.text)
 #
 # import requests
 
@@ -26,14 +26,14 @@ print(res.text)
 #     'habbits': 'smoking'
 # })
 
-# res = requests.post('http://127.0.0.1:5000/registration', json={
-#     'name': "Egor",
-#     'login': 'Egorik',
-#     'password': '1111',
-#     'age': 15,
-#     'sex': 'Male'
-# })
-# print(res.json())
+res = requests.post('http://127.0.0.1:5000/registration', json={
+    'name': "Egor",
+    'login': 'Egorik',
+    'password': '1111',
+    'age': 15,
+    'sex': 'Male'
+})
+print(res.json())
 
 # json = {
 #     'age': ['lox', 'pidr', 20]
@@ -74,7 +74,7 @@ from s3 import s3
 # print(res.json())
 
 #
-res = requests.post('http://127.0.0.1:5000/down_photos/Egorik')
-print(res.text)
+# res = requests.post('http://127.0.0.1:5000/down_photos/Egorik')
+# print(res.text)
 
 

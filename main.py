@@ -15,30 +15,30 @@ from flask_socketio import SocketIO, emit
 from s3 import s3
 from settings import settings
 
-import time
+from waitress import serve
+
 from sqlalchemy.sql import func
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app)
 
 
-# jwt = JWTManager(app)
+
 socketio = SocketIO(app, cors_allowed_origins="*")
-    
+
 
 @socketio.on('message')
 def handle_message(user):
     db_sess = db_session.create_session()
-    a = list(db_sess.query(WhoLikedMe).filter(WhoLikedMe.user_who_was_liked == user))
-    print(a[0])
-    if len(a) != 0:
-        socketio.emit('message', 
-                  {'peoples': list(map(lambda x: x.user_login, a))})
-    # else:
-    #     socketio.emit('message','fdafsd')
+    logins = list(db_sess.query(WhoLikedMe).filter(WhoLikedMe.user_who_was_liked == user))
+    names = list(db_sess.query(User).filter(User.login == user))
+    if len(logins) != 0:
+        socketio.emit('message',
+                  {'logins': list(map(lambda x: x.user_login, logins)),
+                   'names': list(map(lambda x: x.name, names))})
 
 @socketio.on('text')
 def handle_text(text):
@@ -74,7 +74,9 @@ def registration():
         db_sess.commit()
         db_sess.add(pref)
 
-        photo = Photo(img_s3_location=f'{str(params['login'])}_avatar')
+        login = params['login']
+
+        photo = Photo(img_s3_location=f'{str(login)}_avatar')
         photo.user_img = user
         db_sess.add(photo)
         db_sess.commit()
@@ -353,7 +355,7 @@ def down_photos(user_login, avatar):
 
 def main():
     db_session.global_init('db/data_of_users.db')
-    socketio.run(app, debug=True)
+    serve(app, host='127.0.0.1', port='5000')
 
 
 if __name__ == '__main__':
