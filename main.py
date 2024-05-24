@@ -10,20 +10,40 @@ from data.likes import MyLikes, WhoLikedMe
 # from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from config import Config
+from flask_socketio import SocketIO, emit
 
 from s3 import s3
 from settings import settings
 
+import time
 from sqlalchemy.sql import func
 
 app = Flask(__name__)
-cors = CORS(app)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 
 
 # jwt = JWTManager(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
+    
 
+@socketio.on('message')
+def handle_message(user):
+    db_sess = db_session.create_session()
+    a = list(db_sess.query(WhoLikedMe).filter(WhoLikedMe.user_who_was_liked == user))
+    print(a[0])
+    if len(a) != 0:
+        socketio.emit('message', 
+                  {'peoples': list(map(lambda x: x.user_login, a))})
+    # else:
+    #     socketio.emit('message','fdafsd')
+
+@socketio.on('text')
+def handle_text(text):
+    print(text)
+    socketio.emit('text', 'fdsafasd')
 
 @app.route("/registration", methods=["POST"])
 def registration():
@@ -180,7 +200,7 @@ def who_i_liked(user_login):
     user = db_sess.query(User).filter_by(login=user_login).first()
     if user:
         return jsonify(
-            {'users_who_i_liked': [i.user_login for i in user.my_likes]}
+            {'users_who_i_liked': [i.who_i_liked for i in user.my_likes]}
         )
     return jsonify({'access': 'Пользователь не найден', 'status_code': 404})
 
@@ -333,7 +353,7 @@ def down_photos(user_login, avatar):
 
 def main():
     db_session.global_init('db/data_of_users.db')
-    app.run(debug=True)
+    socketio.run(app, debug=True)
 
 
 if __name__ == '__main__':
